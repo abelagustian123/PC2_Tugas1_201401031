@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PC_TUGAS1_201401031</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Menu</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" id='read'>Read Image <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id='ori'>Original Image</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id='hist1'>Histogram</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id='default'>Default RGBA</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+        <canvas id='canvas1'></canvas></div>
+        <canvas id='canvas2'></canvas></div>
+    
+        <div class="rgbaaa">
+            <select id='histval'>
+                <option value='0'>Red</option>
+                <option value='1'>Green</option>
+                <option value='2'>Blue</option>
+            </select><br>
+            R<input type="range" min='-255' max='255' data-id='1' id='ch1'><input type='text' id='chv1' size='3' disabled value='0'><br>
+            G<input type="range" min='-255' max='255' data-id='2' id='ch2'><input type='text' id='chv2' size='3' disabled value='0'><br>
+            B<input type="range" min='-255' max='255' data-id='3' id='ch3'><input type='text' id='chv3' size='3' disabled value='0'><br>
+            A<input type="range" min='0' max='255' data-id='4' id='ch4' value='255'><input type='text' id='chv4' size='3' disabled value='255'><br>
+        </div>
+    
+</body>
+
+<style>
+    body{
+        background: rgba(255,255,255,1);
+    }
+    #canvas1{
+        float: left;
+        margin-top: 75px;
+        margin-left: 75px;
+        height: 40.625em;
+        border: 1px solid black;
+        padding: 20px;
+    }
+    @media screen and (min-width:992px) {
+        .navbar-collapse{
+            flex-grow: 0;
+        }
+        .navbar{
+            justify-content: center;
+        }
+    }
+    .rgbaaa{
+        border: 2px solid black;
+        padding: 20px;
+        float : right;
+        margin-right: 400px;
+        margin-top : 280px;
+    }
+</style>
+<script src="pc.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas1')
+    var obj = new pc(canvas)
+    obj.image2canvas("luffy.png")
+
+    var canvas2 = document.getElementById('canvas2')
+    var obj2 = new pc(canvas2)
+    obj2.blank2canvas(200,200)
+
+    var tes = new Array()
+    document.getElementById('read').addEventListener('click', function(){
+        tes = obj.image2read()
+    })
+
+    document.getElementById('ori').addEventListener('click', function(){
+        obj.image2original()
+    })
+
+    function rgbachange(){
+        tesbackup = new Array()
+        for(var c = 0; c < tes.length; c++){
+            temp = new Array()
+            for (var d = 0; d<4; d++){
+                temp.push(tes[c][d])
+            }
+            tesbackup.push(temp)
+        }
+
+        for(var j =0; j<tesbackup.length; j++){
+            tesbackup[j][0] += parseInt(document.getElementById('ch1').value)
+            tesbackup[j][1] += parseInt(document.getElementById('ch2').value)
+            tesbackup[j][2] += parseInt(document.getElementById('ch3').value)
+            tesbackup[j][3]  = parseInt(document.getElementById('ch4').value)
+        }
+        for(var i = 1; i<=4; i++) document.getElementById('chv'+i).value = document.getElementById('ch'+i).value
+        obj.array2canvas(tesbackup)
+    }
+
+    for(var i =1; i<=4; i++){
+        document.getElementById('ch'+i).addEventListener('input',function(){
+            rgbachange()
+        })
+    }
+
+    document.getElementById('default').addEventListener('click',function(){
+        for(var i =1; i<=3; i++){
+            document.getElementById('ch'+i).value = 0
+        }
+        document.getElementById('ch4').value = 255
+        rgbachange()
+    })
+
+    document.getElementById('hist1').addEventListener('click', function () {
+      var hist = obj1.hist2read([
+        parseInt(document.getElementById('histval').value),
+      ]);
+      obj2.hist2canvas(hist[0], 10);
+    });
+    
+
+</script>
+</html>
