@@ -39,16 +39,22 @@
         <canvas id='canvas1'></canvas></div>
         <canvas id='canvas2'></canvas></div>
     
+        
+        
         <div class="rgbaaa">
             <select id='histval'>
                 <option value='0'>Red</option>
                 <option value='1'>Green</option>
                 <option value='2'>Blue</option>
             </select><br>
-            R<input type="range" min='-255' max='255' data-id='1' id='ch1'><input type='text' id='chv1' size='3' disabled value='0'><br>
-            G<input type="range" min='-255' max='255' data-id='2' id='ch2'><input type='text' id='chv2' size='3' disabled value='0'><br>
-            B<input type="range" min='-255' max='255' data-id='3' id='ch3'><input type='text' id='chv3' size='3' disabled value='0'><br>
-            A<input type="range" min='0' max='255' data-id='4' id='ch4' value='255'><input type='text' id='chv4' size='3' disabled value='255'><br>
+
+            R<input type='range' min='-255' max='255' data-id='1' id='ch1'><input type='text' id='chv1' size='3' disabled value='0'><br>
+
+            G<input type='range' min='-255' max='255' data-id='2' id='ch2'><input type='text' id='chv2' size='3' disabled value='0'><br>
+
+            B<input type='range' min='-255' max='255' data-id='3' id='ch3'><input type='text' id='chv3' size='3' disabled value='0'><br>
+
+            A<input type='range' min='0' max='255' data-id='4' id='ch4' value='255'><input type='text' id='chv4' size='3' disabled value='255'><br>
         </div>
     
 </body>
@@ -57,6 +63,7 @@
     body{
         background: rgba(255,255,255,1);
     }
+    
     #canvas1{
         float: left;
         margin-top: 75px;
@@ -65,6 +72,7 @@
         border: 1px solid black;
         padding: 20px;
     }
+
     @media screen and (min-width:992px) {
         .navbar-collapse{
             flex-grow: 0;
@@ -77,10 +85,18 @@
         border: 2px solid black;
         padding: 20px;
         float : right;
-        margin-right: 400px;
-        margin-top : 280px;
+        margin-right: 550px;
+        margin-top : -200px;
+    }
+    #canvas2{
+        border: 1px solid black;
+        padding: 20px;
+        margin-top : 100px;
+        margin-left: 400px;
     }
 </style>
+
+
 <script src="pc.js"></script>
 <script>
 
@@ -135,9 +151,9 @@
         rgbachange()
     })
 
-    document.getElementById('hist1').addEventListener('click', function () {
-      var hist = obj1.hist2read([
-        parseInt(document.getElementById('histval').value),
+    document.getElementById('hist1').addEventListener('click', function() {
+      var hist = obj.hist2read([
+        parseInt(document.getElementById("histval").value),
       ]);
       obj2.hist2canvas(hist[0], 10);
     });
